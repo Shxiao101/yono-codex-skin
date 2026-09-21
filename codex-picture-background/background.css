@@ -1,0 +1,533 @@
+:root.codex-picture-background {
+  color-scheme: dark;
+  --picture-cyan: #55e6ff;
+  --picture-magenta: #f05aaa;
+  --picture-violet: #9f78ff;
+  --picture-sidebar: rgb(7 7 14 / 82%);
+  --picture-main-left: rgb(9 8 18 / 78%);
+  --picture-main-mid: rgb(11 9 22 / 58%);
+  --picture-main-right: rgb(7 8 17 / 35%);
+  --picture-panel: rgb(18 16 29 / 78%);
+  --picture-surface: rgb(8 7 16 / 62%);
+  --picture-surface-strong: rgb(9 8 18 / 84%);
+  --picture-card: rgb(18 16 29 / 74%);
+  --picture-control: rgb(27 23 42 / 82%);
+  --picture-elevated: rgb(22 19 35 / 90%);
+  --picture-output: rgb(18 16 29 / 40%);
+  --picture-terminal: rgb(6 6 13 / 52%);
+  --picture-line: rgb(255 255 255 / 10%);
+  --picture-text-primary: #f7f4ff;
+  --picture-text-secondary: #d8d2e9;
+  --picture-neon-line: color-mix(in oklab, var(--picture-cyan) 48%, var(--picture-magenta));
+  --picture-neon-soft: color-mix(in oklab, var(--picture-cyan) 18%, transparent);
+  --color-background-surface: var(--picture-surface) !important;
+  --color-background-panel: var(--picture-card) !important;
+  --color-background-control: var(--picture-control) !important;
+  --color-background-control-opaque: var(--picture-control) !important;
+  --color-background-elevated-primary: var(--picture-elevated) !important;
+  --color-background-elevated-primary-opaque: var(--picture-elevated) !important;
+  --color-background-elevated-secondary: rgb(159 120 255 / 10%) !important;
+  --color-background-elevated-secondary-opaque: var(--picture-control) !important;
+  --color-token-main-surface-primary: var(--picture-surface) !important;
+  --color-token-dropdown-background: var(--picture-elevated) !important;
+  --color-token-input-background: var(--picture-control) !important;
+  --color-token-bg-fog: rgb(255 255 255 / 4%) !important;
+  --color-token-menu-border: rgb(255 255 255 / 10%) !important;
+}
+
+html.codex-picture-background,
+html.codex-picture-background body {
+  min-height: 100%;
+  background-color: #080711 !important;
+}
+
+html.codex-picture-background body {
+  background-image:
+    linear-gradient(90deg, rgb(5 5 12 / 77%) 0%, rgb(7 6 16 / 54%) 43%, rgb(5 6 14 / 25%) 100%),
+    linear-gradient(0deg, rgb(4 4 10 / 18%), rgb(4 4 10 / 18%)),
+    var(--codex-picture-art) !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+html.codex-picture-background body > div,
+html.codex-picture-background body > main {
+  background-color: transparent !important;
+}
+
+/* Newer Electron shells wrap the WebView in a full-window surface. */
+html.codex-picture-background main[class~="bg-surface"][class~="no-drag"],
+html.codex-picture-background webview[class~="bg-surface"] {
+  background: transparent !important;
+}
+
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) {
+  background: linear-gradient(90deg, var(--picture-sidebar), rgb(9 8 18 / 68%)) !important;
+  border-color: var(--picture-line) !important;
+  box-shadow:
+    inset -1px 0 var(--picture-line),
+    12px 0 32px rgb(0 0 0 / 18%),
+    4px 0 22px rgb(159 120 255 / 8%) !important;
+  backdrop-filter: blur(12px) saturate(.9) !important;
+}
+
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) nav,
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label]))::after {
+  background: transparent !important;
+}
+
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) button,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) button {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease,
+    transform 160ms ease !important;
+}
+
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) button:hover {
+  background: color-mix(in oklab, var(--picture-magenta) 15%, transparent) !important;
+  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 16px rgb(240 90 170 / 10%) !important;
+}
+
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [aria-current="page"],
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [aria-selected="true"],
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [data-app-action-sidebar-thread-active="true"],
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [class~="bg-token-list-hover-background"] {
+  background: linear-gradient(90deg, rgb(240 90 170 / 24%), rgb(85 230 255 / 10%)) !important;
+  border-color: rgb(85 230 255 / 24%) !important;
+  box-shadow:
+    inset 3px 0 var(--picture-magenta),
+    inset 0 0 0 1px rgb(85 230 255 / 12%),
+    0 0 20px rgb(159 120 255 / 10%) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) {
+  background: linear-gradient(90deg,
+    var(--picture-main-left),
+    var(--picture-main-mid) 58%,
+    var(--picture-main-right)) !important;
+  border-color: var(--picture-line) !important;
+  box-shadow: none !important;
+}
+
+/* Reclaim the horizontal space when the fixed left sidebar is collapsed. */
+@media (min-width: 901px) {
+  html.codex-picture-background:not(:has(aside.app-shell-left-panel))
+    :is(main.main-surface, main[class*="_MainContentSurface_"]) {
+    --thread-content-max-width: min(72rem, calc(100vw - 3rem));
+  }
+
+  html.codex-picture-background:not(:has(aside.app-shell-left-panel))
+    :is(main.main-surface, main[class*="_MainContentSurface_"]):has(
+      [class~="rounded-3xl"]:is([class~="bg-token-dropdown-background"], [class~="bg-surface-elevated-secondary"]) header
+    ) {
+    --thread-content-max-width: min(56rem, calc(100vw - 22rem));
+  }
+
+  html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+    [class*="max-w-(--thread-content-max-width)"] {
+    transition: max-width 220ms ease !important;
+  }
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) header.app-header-tint,
+html.codex-picture-background [class~="group/application-menu-top-bar"] {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) header.app-header-tint::after,
+html.codex-picture-background [class~="group/application-menu-top-bar"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--picture-magenta), var(--picture-cyan), transparent);
+  opacity: .42;
+  box-shadow: 0 0 12px rgb(85 230 255 / 20%);
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [role="main"],
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) .app-shell-main-content-frame,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) .thread-scroll-container,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [class~="bg-token-main-surface-primary"][class~="h-full"][class~="w-full"] {
+  background: transparent !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) :is(
+  .app-shell-main-content-top-fade,
+  [data-app-shell-main-content-top-fade]
+),
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  .thread-scroll-container [class~="bg-gradient-to-t"][class~="from-surface"][class~="via-surface"] {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Full-page surfaces used by Sites and every Settings category. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  :is(
+    [class~="bg-token-main-surface-primary"],
+    [class~="electron:bg-token-main-surface-primary"],
+    [class~="bg-surface"],
+    [class~="electron:bg-surface"]
+  )[class~="h-full"] {
+  background: transparent !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="sticky"][class~="bg-token-main-surface-primary"] {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* The right-sidebar first-run shortcuts sit in a full-width sticky wrapper. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(> ul) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Search headers should not paint an opaque bar behind their controls. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(input),
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="group/settings"] [class~="sticky"][class~="bg-surface"]:has(:is(input, [role="tablist"])) {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(input)::after,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="group/settings"] [class~="sticky"][class~="bg-surface"]:has(:is(input, [role="tablist"]))::after {
+  background: transparent !important;
+  background-image: none !important;
+  --tw-gradient-from: transparent !important;
+  --tw-gradient-to: transparent !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class*="after:from-token-main-surface-primary"]::after {
+  --tw-gradient-from: var(--picture-surface-strong) !important;
+  --tw-gradient-to: transparent !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [style*="var(--color-background-panel"] {
+  background: var(--picture-card) !important;
+  border-color: color-mix(in oklab, var(--picture-violet) 24%, var(--picture-line)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 3%),
+    0 12px 30px rgb(0 0 0 / 12%) !important;
+  backdrop-filter: blur(12px) saturate(.92) !important;
+}
+
+/* Bottom terminal panel fallback for Codex versions before the app-shell tabs. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="bg-token-main-surface-primary"]:has(.terminal.xterm) {
+  background: var(--picture-terminal) !important;
+  border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
+  backdrop-filter: blur(14px) saturate(.88) !important;
+}
+
+/*
+ * Current Codex builds nest several main-surface backgrounds around xterm.
+ * Paint the app-shell tab container once and keep every nested terminal layer
+ * transparent so their alpha values do not combine into an opaque black block.
+ */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [data-app-shell-focus-area="bottom-panel"]
+  [class~="bg-token-main-surface-primary"]:has([data-app-shell-tabs="true"]),
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [data-app-shell-focus-area="bottom-panel"]
+  [class~="bg-surface"]:has([data-app-shell-tabs="true"]),
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [data-app-shell-tab-panel-controller="bottom"],
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [data-codex-terminal="true"],
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  .app-theme:has(.terminal.xterm) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tabs="true"] {
+  background: var(--picture-terminal) !important;
+  border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
+  box-shadow: inset 0 1px rgb(85 230 255 / 9%) !important;
+  backdrop-filter: blur(14px) saturate(.88) !important;
+}
+
+/* App-shell panels are no longer guaranteed to be descendants of main. */
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"],
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tab-panel-controller="bottom"],
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-codex-terminal="true"],
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] .app-theme:has(.terminal.xterm) {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tabs="true"] {
+  background: var(--picture-terminal) !important;
+  border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
+  box-shadow: inset 0 1px rgb(85 230 255 / 9%) !important;
+  backdrop-filter: blur(14px) saturate(.88) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="h-toolbar-pane"] {
+  background: var(--picture-surface-strong) !important;
+  border-color: var(--picture-line) !important;
+  box-shadow: inset 0 -1px rgb(255 255 255 / 5%) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class*="group/tab"][role="button"] {
+  background: linear-gradient(90deg, rgb(240 90 170 / 13%), rgb(85 230 255 / 7%)) !important;
+  border: 1px solid rgb(85 230 255 / 13%) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  :is(.terminal.xterm, .xterm-viewport, .xterm-screen, .xterm-scroll-area, .xterm-rows) {
+  background-color: transparent !important;
+}
+
+/* File/review tabs mounted in the app-shell right panel. */
+html.codex-picture-background [data-app-shell-focus-area="right-panel"] {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  :is([data-app-shell-tab-panel-controller="right"], [data-app-shell-tab-panel-controller="right-panel"]) {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  [class~="bg-surface"]:has([data-app-shell-tabs="true"]) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* The empty-tab shortcuts use a centered list inside an opaque sticky surface.
+   Keep the list cards intact while removing the gray gutters around them. */
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  [class~="sticky"][class~="bg-surface"] {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  [data-app-shell-tabs="true"] {
+  background: var(--picture-output) !important;
+  border-color: color-mix(in oklab, var(--picture-cyan) 24%, var(--picture-line)) !important;
+  box-shadow: inset 1px 0 rgb(85 230 255 / 9%) !important;
+  backdrop-filter: blur(14px) saturate(.88) !important;
+}
+
+/* New app-shell builds paint opaque panel backgrounds on the frame, toolbar,
+   and content viewport. Keep only the tabs container as the alpha layer. */
+html.codex-picture-background :is(
+  [data-app-shell-focus-area="bottom-panel"],
+  [data-app-shell-focus-area="right-panel"]
+) [class*="--app-shell-panel-background"] {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Right-side Output summary panel. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="rounded-3xl"]:is([class~="bg-token-dropdown-background"], [class~="bg-surface-elevated-secondary"]):has(header) {
+  background: var(--picture-output) !important;
+  border: 1px solid color-mix(in oklab, var(--picture-cyan) 24%, var(--picture-line)) !important;
+  box-shadow:
+    0 18px 42px rgb(0 0 0 / 28%),
+    inset 0 0 0 1px rgb(255 255 255 / 4%),
+    0 0 22px rgb(159 120 255 / 8%) !important;
+  backdrop-filter: blur(18px) saturate(.9) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class~="rounded-3xl"]:is([class~="bg-token-dropdown-background"], [class~="bg-surface-elevated-secondary"]) header {
+  background: transparent !important;
+  border-color: var(--picture-line) !important;
+}
+
+html.codex-picture-background .composer-surface-chrome,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) div.no-drag:has(> input[type="text"]) {
+  background: var(--picture-panel) !important;
+  border-color: color-mix(in oklab, var(--picture-cyan) 22%, var(--picture-line)) !important;
+  box-shadow:
+    0 10px 34px rgb(0 0 0 / 26%),
+    inset 0 0 0 1px rgb(255 255 255 / 4%),
+    0 0 18px rgb(85 230 255 / 7%) !important;
+  backdrop-filter: blur(14px) saturate(.95) !important;
+  transition: border-color 180ms ease, box-shadow 180ms ease !important;
+}
+
+html.codex-picture-background .composer-surface-chrome:focus-within,
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) div.no-drag:has(> input[type="text"]):focus-within {
+  border-color: var(--picture-neon-line) !important;
+  box-shadow:
+    0 12px 38px rgb(0 0 0 / 34%),
+    inset 0 0 0 1px rgb(85 230 255 / 15%),
+    0 0 22px rgb(85 230 255 / 13%),
+    0 0 34px rgb(240 90 170 / 8%) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) button:hover:not(:disabled) {
+  border-color: rgb(85 230 255 / 22%) !important;
+  box-shadow: 0 0 15px rgb(85 230 255 / 8%);
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [data-state="active"],
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [aria-selected="true"] {
+  border-color: var(--picture-neon-line) !important;
+  box-shadow: inset 0 -2px var(--picture-cyan), 0 0 14px rgb(85 230 255 / 10%) !important;
+}
+
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) a:hover {
+  color: color-mix(in oklab, currentColor 72%, var(--picture-cyan)) !important;
+  text-shadow: 0 0 10px rgb(85 230 255 / 18%);
+}
+
+html.codex-picture-background pre,
+html.codex-picture-background code[class*="language-"] {
+  border-color: rgb(159 120 255 / 18%) !important;
+  box-shadow: inset 0 0 0 1px rgb(85 230 255 / 4%);
+}
+
+html.codex-picture-background * {
+  scrollbar-color: rgb(240 90 170 / 52%) rgb(8 7 16 / 35%);
+}
+
+html.codex-picture-background *::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+html.codex-picture-background *::-webkit-scrollbar-track {
+  background: rgb(8 7 16 / 30%);
+}
+
+html.codex-picture-background *::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(var(--picture-magenta), var(--picture-violet), var(--picture-cyan)) padding-box;
+}
+
+html.codex-picture-background *::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(var(--picture-cyan), var(--picture-magenta)) padding-box;
+}
+
+/* Profile menu and other portal-mounted menus/dialogs/tooltips. */
+html.codex-picture-background [role="menu"][data-state="open"],
+html.codex-picture-background [data-radix-popper-content-wrapper] > div,
+html.codex-picture-background [role="dialog"],
+html.codex-picture-background [role="tooltip"] {
+  --color-token-text-primary: var(--picture-text-primary) !important;
+  --color-token-text-secondary: var(--picture-text-secondary) !important;
+  --color-text-primary: var(--picture-text-primary) !important;
+  --color-text-secondary: var(--picture-text-secondary) !important;
+  background: var(--picture-elevated) !important;
+  border-color: color-mix(in oklab, var(--picture-violet) 28%, var(--picture-line)) !important;
+  box-shadow:
+    0 18px 48px rgb(0 0 0 / 34%),
+    inset 0 0 0 1px rgb(255 255 255 / 4%),
+    0 0 24px rgb(85 230 255 / 8%) !important;
+  backdrop-filter: blur(18px) saturate(.9) !important;
+}
+
+/* Newer Codex builds give tooltip children an explicit light-theme color. */
+html.codex-picture-background [role="tooltip"],
+html.codex-picture-background [role="tooltip"] * {
+  color: var(--picture-text-primary) !important;
+}
+
+html.codex-picture-background [role="menu"][data-state="open"] [role="menuitem"] {
+  transition: background-color 150ms ease, box-shadow 150ms ease, color 150ms ease !important;
+}
+
+html.codex-picture-background [role="menu"][data-state="open"] [role="menuitem"]:is(:hover, :focus) {
+  background: linear-gradient(90deg, rgb(240 90 170 / 18%), rgb(85 230 255 / 8%)) !important;
+  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 14px rgb(85 230 255 / 7%) !important;
+}
+
+html.codex-picture-background [role="menu"][data-state="open"]
+  :is([role="separator"], [class~="bg-token-menu-border"]) {
+  background: linear-gradient(90deg, transparent, var(--picture-neon-line), transparent) !important;
+  opacity: .55;
+}
+
+@media (max-width: 900px) {
+  html.codex-picture-background body {
+    background-position: 64% center !important;
+  }
+
+  html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) {
+    background: rgb(8 7 16 / 70%) !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root.codex-picture-background {
+    --picture-sidebar: rgb(7 7 14 / 94%);
+    --picture-main-left: rgb(9 8 18 / 91%);
+    --picture-main-mid: rgb(11 9 22 / 82%);
+    --picture-main-right: rgb(7 8 17 / 72%);
+    --picture-surface: rgb(8 7 16 / 90%);
+    --picture-surface-strong: rgb(9 8 18 / 96%);
+    --picture-card: rgb(18 16 29 / 94%);
+    --picture-control: rgb(27 23 42 / 94%);
+    --picture-elevated: rgb(22 19 35 / 96%);
+    --picture-output: rgb(18 16 29 / 94%);
+    --picture-terminal: rgb(6 6 13 / 96%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.codex-picture-background *,
+  html.codex-picture-background *::before,
+  html.codex-picture-background *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
