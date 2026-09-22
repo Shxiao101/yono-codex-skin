@@ -20,6 +20,20 @@
   --picture-text-secondary: #d8d2e9;
   --picture-neon-line: color-mix(in oklab, var(--picture-cyan) 48%, var(--picture-magenta));
   --picture-neon-soft: color-mix(in oklab, var(--picture-cyan) 18%, transparent);
+  /* Current semantic surfaces also cover nested panels and detached windows. */
+  --color-surface: var(--picture-surface) !important;
+  --color-surface-secondary: var(--picture-surface) !important;
+  --color-surface-tertiary: var(--picture-control) !important;
+  --color-surface-canvas: var(--picture-surface) !important;
+  --color-surface-recovery: var(--picture-surface) !important;
+  --color-surface-elevated: var(--picture-panel) !important;
+  --color-surface-elevated-secondary: var(--picture-control) !important;
+  --color-background-primary-soft: var(--picture-control) !important;
+  --color-background-activity-input: var(--picture-panel) !important;
+  --color-background-activity-control: var(--picture-control) !important;
+  --color-background-callout-surface: var(--picture-card) !important;
+  --color-background-execution-output: var(--picture-surface) !important;
+  --color-background-tooltip: var(--picture-elevated) !important;
   --color-background-surface: var(--picture-surface) !important;
   --color-background-panel: var(--picture-card) !important;
   --color-background-control: var(--picture-control) !important;
@@ -202,11 +216,14 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   backdrop-filter: none !important;
 }
 
-/* Search headers should not paint an opaque bar behind their controls. */
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(input),
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="group/settings"] [class~="sticky"][class~="bg-surface"]:has(:is(input, [role="tablist"])) {
+/* Shared search/filter/tab chrome across settings and catalog layouts.
+   Match the surface and its controls, not a particular page wrapper. */
+html.codex-picture-background
+  [class~="bg-surface"]:has(> div > [class~="bg-page-search"]),
+html.codex-picture-background
+  [class~="sticky"]:has(:is(input, [role="searchbox"], [role="tablist"])),
+html.codex-picture-background
+  [class~="sticky"]:is([class~="bg-token-main-surface-primary"], [class~="bg-surface"]) {
   background: transparent !important;
   background-image: none !important;
   border-color: transparent !important;
@@ -214,10 +231,12 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   backdrop-filter: none !important;
 }
 
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(input)::after,
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="group/settings"] [class~="sticky"][class~="bg-surface"]:has(:is(input, [role="tablist"]))::after {
+html.codex-picture-background
+  [class~="bg-surface"]:has(> div > [class~="bg-page-search"])::after,
+html.codex-picture-background
+  [class~="sticky"]:has(:is(input, [role="searchbox"], [role="tablist"]))::after,
+html.codex-picture-background
+  [class~="sticky"]:is([class~="bg-token-main-surface-primary"], [class~="bg-surface"])::after {
   background: transparent !important;
   background-image: none !important;
   --tw-gradient-from: transparent !important;
@@ -298,9 +317,9 @@ html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-a
   backdrop-filter: blur(14px) saturate(.88) !important;
 }
 
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="h-toolbar-pane"] {
-  background: var(--picture-surface-strong) !important;
+html.codex-picture-background [data-app-shell-tabs="true"]
+  :is([class~="h-toolbar-pane"], [class~="h-toolbar"]) {
+  background: transparent !important;
   border-color: var(--picture-line) !important;
   box-shadow: inset 0 -1px rgb(255 255 255 / 5%) !important;
 }
