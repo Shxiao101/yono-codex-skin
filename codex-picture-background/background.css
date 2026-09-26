@@ -13,7 +13,7 @@
   --picture-card: rgb(18 16 29 / 74%);
   --picture-control: rgb(27 23 42 / 82%);
   --picture-elevated: rgb(22 19 35 / 90%);
-  --picture-output: rgb(18 16 29 / 40%);
+  --picture-output: rgb(18 16 29 / 28%);
   --picture-terminal: rgb(6 6 13 / 52%);
   --picture-line: rgb(255 255 255 / 10%);
   --picture-text-primary: #f7f4ff;
@@ -132,14 +132,16 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
 @media (min-width: 901px) {
   html.codex-picture-background:not(:has(aside.app-shell-left-panel))
     :is(main.main-surface, main[class*="_MainContentSurface_"]) {
-    --thread-content-max-width: min(72rem, calc(100vw - 3rem));
+    --thread-content-expanded-max-width: min(72rem, calc(100vw - 3rem));
+    --thread-content-max-width: var(--thread-content-expanded-max-width);
   }
 
   html.codex-picture-background:not(:has(aside.app-shell-left-panel))
     :is(main.main-surface, main[class*="_MainContentSurface_"]):has(
       [class~="rounded-3xl"]:is([class~="bg-token-dropdown-background"], [class~="bg-surface-elevated-secondary"]) header
     ) {
-    --thread-content-max-width: min(56rem, calc(100vw - 22rem));
+    --thread-content-expanded-max-width: min(56rem, calc(100vw - 22rem));
+    --thread-content-max-width: var(--thread-content-expanded-max-width);
   }
 
   html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
@@ -179,6 +181,7 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) :is(
   .app-shell-main-content-top-fade,
+  [class*="_MainContentTopFade_"],
   [data-app-shell-main-content-top-fade]
 ),
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary,
@@ -214,6 +217,12 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   border-color: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
+}
+
+/* The shared page header now paints its sticky surface on ::before. */
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+  [class*="_shell_"][data-sticky]::before {
+  background: transparent !important;
 }
 
 /* Shared search/filter/tab chrome across settings and catalog layouts.
@@ -410,6 +419,9 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   border-color: var(--picture-line) !important;
 }
 
+/* Current composers paint the root, or the body for the home layout. */
+html.codex-picture-background [data-composer-surface-variant]:not([data-composer-utility-bar-variant="home"]),
+html.codex-picture-background [data-composer-utility-bar-variant="home"] > [data-composer-body],
 html.codex-picture-background .composer-surface-chrome,
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) div.no-drag:has(> input[type="text"]) {
   background: var(--picture-panel) !important;
@@ -422,6 +434,8 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   transition: border-color 180ms ease, box-shadow 180ms ease !important;
 }
 
+html.codex-picture-background [data-composer-surface-variant]:not([data-composer-utility-bar-variant="home"]):focus-within,
+html.codex-picture-background [data-composer-utility-bar-variant="home"] > [data-composer-body]:focus-within,
 html.codex-picture-background .composer-surface-chrome:focus-within,
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) div.no-drag:has(> input[type="text"]):focus-within {
   border-color: var(--picture-neon-line) !important;

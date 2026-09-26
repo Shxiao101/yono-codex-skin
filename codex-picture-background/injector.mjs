@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VERSION = "1.2.25";
+const VERSION = "1.2.28";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 const ID = /^[A-Za-z0-9._-]{1,200}$/;
