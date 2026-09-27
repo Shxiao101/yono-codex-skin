@@ -3,17 +3,15 @@
   --picture-cyan: #55e6ff;
   --picture-magenta: #f05aaa;
   --picture-violet: #9f78ff;
+  --picture-backdrop: rgb(8 7 16 / 48%);
   --picture-sidebar: rgb(7 7 14 / 82%);
-  --picture-main-left: rgb(9 8 18 / 78%);
-  --picture-main-mid: rgb(11 9 22 / 58%);
-  --picture-main-right: rgb(7 8 17 / 35%);
   --picture-panel: rgb(18 16 29 / 78%);
   --picture-surface: rgb(8 7 16 / 62%);
   --picture-surface-strong: rgb(9 8 18 / 84%);
   --picture-card: rgb(18 16 29 / 74%);
   --picture-control: rgb(27 23 42 / 82%);
   --picture-elevated: rgb(22 19 35 / 90%);
-  --picture-output: rgb(18 16 29 / 28%);
+  --picture-output: rgb(18 16 29 / 55%);
   --picture-terminal: rgb(6 6 13 / 52%);
   --picture-line: rgb(255 255 255 / 10%);
   --picture-text-primary: #f7f4ff;
@@ -57,8 +55,7 @@ html.codex-picture-background body {
 
 html.codex-picture-background body {
   background-image:
-    linear-gradient(90deg, rgb(5 5 12 / 77%) 0%, rgb(7 6 16 / 54%) 43%, rgb(5 6 14 / 25%) 100%),
-    linear-gradient(0deg, rgb(4 4 10 / 18%), rgb(4 4 10 / 18%)),
+    linear-gradient(var(--picture-backdrop), var(--picture-backdrop)),
     var(--codex-picture-art) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -119,13 +116,15 @@ html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-ap
     0 0 20px rgb(159 120 255 / 10%) !important;
 }
 
+/* Shared chrome reveals one continuous backdrop across chat and tabs. */
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) {
-  background: linear-gradient(90deg,
-    var(--picture-main-left),
-    var(--picture-main-mid) 58%,
-    var(--picture-main-right)) !important;
+  background: transparent !important;
   border-color: var(--picture-line) !important;
   box-shadow: none !important;
+}
+
+html.codex-picture-background [class*="_MainContentViewport_"] {
+  background: transparent !important;
 }
 
 /* Reclaim the horizontal space when the fixed left sidebar is collapsed. */
@@ -344,6 +343,10 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   background-color: transparent !important;
 }
 
+html.codex-picture-background [class*="_WorkspaceContent_"]::before {
+  background: transparent !important;
+}
+
 /* File/review tabs mounted in the app-shell right panel. */
 html.codex-picture-background [data-app-shell-focus-area="right-panel"] {
   background: transparent !important;
@@ -369,8 +372,11 @@ html.codex-picture-background [data-app-shell-focus-area="right-panel"]
   backdrop-filter: none !important;
 }
 
-/* The empty-tab shortcuts use a centered list inside an opaque sticky surface.
-   Keep the list cards intact while removing the gray gutters around them. */
+/* Address-bar chrome and new-tab content share the window backdrop. */
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  [class~="bg-surface"]:has(> div > [data-browser-sidebar-toolbar]),
+html.codex-picture-background [data-app-shell-focus-area="right-panel"]
+  [data-new-tab-scroll-root],
 html.codex-picture-background [data-app-shell-focus-area="right-panel"]
   [class~="sticky"][class~="bg-surface"] {
   background: transparent !important;
@@ -380,12 +386,17 @@ html.codex-picture-background [data-app-shell-focus-area="right-panel"]
   backdrop-filter: none !important;
 }
 
+/* Tint the detached tab strip and panel equally, once per region. */
+html.codex-picture-background [data-app-shell-focus-area="right-panel"][class~="group/titlebar"] {
+  background: var(--picture-output) !important;
+}
+
 html.codex-picture-background [data-app-shell-focus-area="right-panel"]
   [data-app-shell-tabs="true"] {
   background: var(--picture-output) !important;
   border-color: color-mix(in oklab, var(--picture-cyan) 24%, var(--picture-line)) !important;
   box-shadow: inset 1px 0 rgb(85 230 255 / 9%) !important;
-  backdrop-filter: blur(14px) saturate(.88) !important;
+  backdrop-filter: none !important;
 }
 
 /* New app-shell builds paint opaque panel backgrounds on the frame, toolbar,
@@ -535,17 +546,12 @@ html.codex-picture-background [role="menu"][data-state="open"]
     background-position: 64% center !important;
   }
 
-  html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) {
-    background: rgb(8 7 16 / 70%) !important;
-  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   :root.codex-picture-background {
+    --picture-backdrop: rgb(8 7 16 / 94%);
     --picture-sidebar: rgb(7 7 14 / 94%);
-    --picture-main-left: rgb(9 8 18 / 91%);
-    --picture-main-mid: rgb(11 9 22 / 82%);
-    --picture-main-right: rgb(7 8 17 / 72%);
     --picture-surface: rgb(8 7 16 / 90%);
     --picture-surface-strong: rgb(9 8 18 / 96%);
     --picture-card: rgb(18 16 29 / 94%);
