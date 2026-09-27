@@ -84,7 +84,7 @@ html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-ap
   backdrop-filter: blur(12px) saturate(.9) !important;
 }
 
-html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) nav,
+html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) :is(nav, .sidebar-navigation),
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label]))::after {
   background: transparent !important;
 }
@@ -149,12 +149,31 @@ html.codex-picture-background [class*="_MainContentViewport_"] {
   }
 }
 
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) header.app-header-tint,
-html.codex-picture-background [class~="group/application-menu-top-bar"] {
+html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) header.app-header-tint {
   background: transparent !important;
   background-image: none !important;
   border-color: transparent !important;
   backdrop-filter: none !important;
+}
+
+/* Paint the menu and native titlebar spacer as one continuous surface. */
+html.codex-picture-background :is([class~="group/application-menu-top-bar"], [class*="_ApplicationMenuTopBar_"]) {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+html.codex-picture-background :is([class~="group/application-menu-top-bar"], [class*="_ApplicationMenuTopBar_"])::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-inline: 0;
+  top: 0;
+  height: calc(100% + var(--app-shell-titlebar-height));
+  background: linear-gradient(90deg, var(--picture-sidebar), rgb(9 8 18 / 68%));
+  backdrop-filter: blur(12px) saturate(.9);
+  pointer-events: none;
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) header.app-header-tint::after,
@@ -471,6 +490,32 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) a:hover {
   color: color-mix(in oklab, currentColor 72%, var(--picture-cyan)) !important;
   text-shadow: 0 0 10px rgb(85 230 255 / 18%);
+}
+
+/* Comic chat balloons: keep text upright and reserve space for the tail. */
+html.codex-picture-background [data-user-message-bubble="true"] {
+  --color-text-user-message: #fff;
+  background: #08080b !important;
+  color: #fff !important;
+  border: 2px solid #f5f5f7 !important;
+  border-radius: 0 !important;
+  box-shadow: -4px 4px 0 #08080b, -4px 4px 0 1px #f5f5f7 !important;
+  padding: 9px 14px !important;
+  margin-inline-end: 18px;
+  margin-block: 6px;
+  position: relative;
+  overflow: visible !important;
+}
+
+html.codex-picture-background [data-user-message-bubble="true"]::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  right: -21px;
+  width: 26px;
+  height: 28px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 28'%3E%3Cpath fill='%23f5f5f7' d='M0 14 L11 7 L12 12 L26 0 L15 23 L10 19 L0 28 Z'/%3E%3Cpath fill='%2308080b' d='M0 17 L9 12 L10 17 L20 8 L14 19 L10 16 L0 24 Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
 }
 
 html.codex-picture-background pre,
