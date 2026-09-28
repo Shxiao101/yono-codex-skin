@@ -148,7 +148,7 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'Background verification failed.' }
 
   $watcherArguments = @(
-    $injectorPath, '--watch', '--port', "$port", '--browser-id', $browserId,
+    ('"' + $injectorPath + '"'), '--watch', '--port', "$port", '--browser-id', $browserId,
     '--background', $Background
   )
   $watcher = Start-Process -FilePath $node -ArgumentList $watcherArguments -WindowStyle Hidden `
@@ -160,6 +160,7 @@ try {
     schemaVersion = 1
     port = $port
     browserId = $browserId
+    background = $Background
     injectorPid = $watcher.Id
     mode = 'watch'
     createdAt = (Get-Date).ToUniversalTime().ToString('o')

@@ -3,7 +3,7 @@
   --picture-cyan: #55e6ff;
   --picture-magenta: #f05aaa;
   --picture-violet: #9f78ff;
-  --picture-backdrop: rgb(8 7 16 / 48%);
+  --picture-backdrop: rgb(8 7 16 / 64%);
   --picture-sidebar: rgb(7 7 14 / 82%);
   --picture-panel: rgb(18 16 29 / 78%);
   --picture-surface: rgb(8 7 16 / 62%);
@@ -15,8 +15,25 @@
   --picture-terminal: rgb(6 6 13 / 52%);
   --picture-line: rgb(255 255 255 / 10%);
   --picture-text-primary: #f7f4ff;
-  --picture-text-secondary: #d8d2e9;
+  --picture-text-secondary: #e6e0f2;
+  --picture-text-link: #e6dcff;
   --picture-ink: #12101d;
+  --picture-sidebar-end: rgb(9 8 18 / 68%);
+  --picture-blur-sidebar: 12px;
+  --picture-blur-card: 12px;
+  --picture-blur-control: 14px;
+  --picture-blur-output: 18px;
+  --picture-blur-terminal: 14px;
+  --picture-blur-elevated: 18px;
+  --picture-bubble-background: #08080b;
+  --picture-bubble-text: #fff;
+  --picture-bubble-border: #f5f5f7;
+  --picture-bubble-padding: 9px 14px;
+  --picture-bubble-tail-width: 26px;
+  --picture-bubble-tail-height: 28px;
+  --picture-bubble-tail-space: 22px;
+  --picture-bubble-tail-top: -9px;
+  --picture-bubble-tail-right: -21px;
   --picture-neon-line: color-mix(in oklab, var(--picture-cyan) 48%, var(--picture-magenta));
   --picture-neon-soft: color-mix(in oklab, var(--picture-cyan) 18%, transparent);
   /* Own the appearance while installed; never depend on saved app preferences.
@@ -25,7 +42,7 @@
   --codex-content-font-family: var(--font-sans-default) !important;
   --app-color-text-foreground: var(--picture-text-primary) !important;
   --app-color-text-foreground-secondary: var(--picture-text-secondary) !important;
-  --app-color-text-foreground-tertiary: rgb(247 244 255 / 60%) !important;
+  --app-color-text-foreground-tertiary: rgb(247 244 255 / 80%) !important;
   --app-color-text-secondary: var(--picture-text-secondary) !important;
   --app-color-foreground-application-menu: var(--picture-text-secondary) !important;
   --app-color-icon-primary: var(--picture-text-primary) !important;
@@ -37,24 +54,26 @@
   --app-color-text-button-tertiary: var(--picture-text-secondary) !important;
   --app-color-accent-blue: var(--picture-violet) !important;
   --app-color-accent-purple: var(--picture-violet) !important;
-  --app-color-text-accent: var(--picture-violet) !important;
+  --app-color-text-accent: var(--picture-text-link) !important;
+  --color-text-info: var(--picture-text-link) !important;
+  --color-token-text-link-foreground: var(--picture-text-link) !important;
   --app-color-icon-accent: var(--picture-violet) !important;
   --app-color-text-on-accent: var(--picture-ink) !important;
-  --app-color-background-accent: rgb(159 120 255 / 22%) !important;
-  --app-color-background-accent-hover: rgb(159 120 255 / 30%) !important;
-  --app-color-background-accent-active: rgb(159 120 255 / 38%) !important;
+  --app-color-background-accent: color-mix(in srgb, var(--picture-violet) 22%, transparent) !important;
+  --app-color-background-accent-hover: color-mix(in srgb, var(--picture-violet) 30%, transparent) !important;
+  --app-color-background-accent-active: color-mix(in srgb, var(--picture-violet) 38%, transparent) !important;
   --app-color-background-surface: var(--picture-ink) !important;
   --app-color-background-button-primary: var(--picture-violet) !important;
   --app-color-background-button-primary-hover: #b498ff !important;
   --app-color-background-button-primary-active: #8c65ed !important;
   --app-color-background-button-primary-inactive: var(--picture-control) !important;
   --app-color-background-button-secondary: var(--picture-control) !important;
-  --app-color-background-button-secondary-hover: rgb(159 120 255 / 22%) !important;
-  --app-color-background-button-secondary-active: rgb(159 120 255 / 30%) !important;
+  --app-color-background-button-secondary-hover: color-mix(in srgb, var(--picture-violet) 22%, transparent) !important;
+  --app-color-background-button-secondary-active: color-mix(in srgb, var(--picture-violet) 30%, transparent) !important;
   --app-color-background-button-secondary-inactive: var(--picture-control) !important;
   --app-color-background-button-tertiary: transparent !important;
-  --app-color-background-button-tertiary-hover: rgb(159 120 255 / 16%) !important;
-  --app-color-background-button-tertiary-active: rgb(159 120 255 / 24%) !important;
+  --app-color-background-button-tertiary-hover: color-mix(in srgb, var(--picture-violet) 16%, transparent) !important;
+  --app-color-background-button-tertiary-active: color-mix(in srgb, var(--picture-violet) 24%, transparent) !important;
   --app-color-border: var(--picture-line) !important;
   --app-color-border-light: rgb(255 255 255 / 6%) !important;
   --app-color-border-heavy: rgb(255 255 255 / 20%) !important;
@@ -64,8 +83,8 @@
   --color-text-mode-toggle-inactive: var(--picture-text-secondary) !important;
   --color-background-mode-toggle-track: var(--picture-control) !important;
   --color-background-mode-toggle-selected: var(--picture-elevated) !important;
-  --color-background-text-selection: rgb(159 120 255 / 40%) !important;
-  --color-background-attribution-highlight: rgb(159 120 255 / 40%) !important;
+  --color-background-text-selection: color-mix(in srgb, var(--picture-violet) 40%, transparent) !important;
+  --color-background-attribution-highlight: color-mix(in srgb, var(--picture-violet) 40%, transparent) !important;
   --color-image-generation-accent: var(--picture-violet) !important;
   /* Current semantic surfaces also cover nested panels and detached windows. */
   --color-surface: var(--picture-surface) !important;
@@ -87,7 +106,7 @@
   --color-background-control-opaque: var(--picture-control) !important;
   --color-background-elevated-primary: var(--picture-elevated) !important;
   --color-background-elevated-primary-opaque: var(--picture-elevated) !important;
-  --color-background-elevated-secondary: rgb(159 120 255 / 10%) !important;
+  --color-background-elevated-secondary: color-mix(in srgb, var(--picture-violet) 10%, transparent) !important;
   --color-background-elevated-secondary-opaque: var(--picture-control) !important;
   --color-token-main-surface-primary: var(--picture-surface) !important;
   --color-token-dropdown-background: var(--picture-elevated) !important;
@@ -124,13 +143,13 @@ html.codex-picture-background webview[class~="bg-surface"] {
 }
 
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) {
-  background: linear-gradient(90deg, var(--picture-sidebar), rgb(9 8 18 / 68%)) !important;
+  background: linear-gradient(90deg, var(--picture-sidebar), var(--picture-sidebar-end)) !important;
   border-color: var(--picture-line) !important;
   box-shadow:
     inset -1px 0 var(--picture-line),
     12px 0 32px rgb(0 0 0 / 18%),
-    4px 0 22px rgb(159 120 255 / 8%) !important;
-  backdrop-filter: blur(12px) saturate(.9) !important;
+    4px 0 22px color-mix(in srgb, var(--picture-violet) 8%, transparent) !important;
+  backdrop-filter: blur(var(--picture-blur-sidebar)) saturate(.9) !important;
 }
 
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) :is(nav, .sidebar-navigation),
@@ -150,19 +169,19 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
 
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) button:hover {
   background: color-mix(in oklab, var(--picture-magenta) 15%, transparent) !important;
-  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 16px rgb(240 90 170 / 10%) !important;
+  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 16px color-mix(in srgb, var(--picture-magenta) 10%, transparent) !important;
 }
 
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [aria-current="page"],
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [aria-selected="true"],
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [data-app-action-sidebar-thread-active="true"],
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) [class~="bg-token-list-hover-background"] {
-  background: linear-gradient(90deg, rgb(240 90 170 / 24%), rgb(85 230 255 / 10%)) !important;
-  border-color: rgb(85 230 255 / 24%) !important;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--picture-magenta) 24%, transparent), color-mix(in srgb, var(--picture-cyan) 10%, transparent)) !important;
+  border-color: color-mix(in srgb, var(--picture-cyan) 24%, transparent) !important;
   box-shadow:
     inset 3px 0 var(--picture-magenta),
-    inset 0 0 0 1px rgb(85 230 255 / 12%),
-    0 0 20px rgb(159 120 255 / 10%) !important;
+    inset 0 0 0 1px color-mix(in srgb, var(--picture-cyan) 12%, transparent),
+    0 0 20px color-mix(in srgb, var(--picture-violet) 10%, transparent) !important;
 }
 
 /* Shared chrome reveals one continuous backdrop across chat and tabs. */
@@ -220,8 +239,8 @@ html.codex-picture-background :is([class~="group/application-menu-top-bar"], [cl
   inset-inline: 0;
   top: 0;
   height: calc(100% + var(--app-shell-titlebar-height));
-  background: linear-gradient(90deg, var(--picture-sidebar), rgb(9 8 18 / 68%));
-  backdrop-filter: blur(12px) saturate(.9);
+  background: linear-gradient(90deg, var(--picture-sidebar), var(--picture-sidebar-end));
+  backdrop-filter: blur(var(--picture-blur-sidebar)) saturate(.9);
   pointer-events: none;
 }
 
@@ -236,7 +255,7 @@ html.codex-picture-background [class~="group/application-menu-top-bar"]::after {
   pointer-events: none;
   background: linear-gradient(90deg, transparent, var(--picture-magenta), var(--picture-cyan), transparent);
   opacity: .42;
-  box-shadow: 0 0 12px rgb(85 230 255 / 20%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--picture-cyan) 20%, transparent);
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [role="main"],
@@ -267,23 +286,6 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
     [class~="electron:bg-surface"]
   )[class~="h-full"] {
   background: transparent !important;
-}
-
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="sticky"][class~="bg-token-main-surface-primary"] {
-  background: transparent !important;
-  background-image: none !important;
-  border-color: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* The right-sidebar first-run shortcuts sit in a full-width sticky wrapper. */
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="sticky"][class~="bg-token-main-surface-primary"]:has(> ul) {
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
 }
 
 /* The shared page header now paints its sticky surface on ::before. */
@@ -332,53 +334,15 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 3%),
     0 12px 30px rgb(0 0 0 / 12%) !important;
-  backdrop-filter: blur(12px) saturate(.92) !important;
-}
-
-/* Bottom terminal panel fallback for Codex versions before the app-shell tabs. */
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [class~="bg-token-main-surface-primary"]:has(.terminal.xterm) {
-  background: var(--picture-terminal) !important;
-  border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
-  backdrop-filter: blur(14px) saturate(.88) !important;
-}
-
-/*
- * Current Codex builds nest several main-surface backgrounds around xterm.
- * Paint the app-shell tab container once and keep every nested terminal layer
- * transparent so their alpha values do not combine into an opaque black block.
- */
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [data-app-shell-focus-area="bottom-panel"]
-  [class~="bg-token-main-surface-primary"]:has([data-app-shell-tabs="true"]),
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [data-app-shell-focus-area="bottom-panel"]
-  [class~="bg-surface"]:has([data-app-shell-tabs="true"]),
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [data-app-shell-tab-panel-controller="bottom"],
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [data-codex-terminal="true"],
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  .app-theme:has(.terminal.xterm) {
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-}
-
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
-  [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tabs="true"] {
-  background: var(--picture-terminal) !important;
-  border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
-  box-shadow: inset 0 1px rgb(85 230 255 / 9%) !important;
-  backdrop-filter: blur(14px) saturate(.88) !important;
+  backdrop-filter: blur(var(--picture-blur-card)) saturate(.92) !important;
 }
 
 /* App-shell panels are no longer guaranteed to be descendants of main. */
+html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] :is([class~="bg-surface"], [class~="bg-token-main-surface-primary"]):has([data-app-shell-tabs="true"]),
 html.codex-picture-background [data-app-shell-focus-area="bottom-panel"],
 html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tab-panel-controller="bottom"],
-html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-codex-terminal="true"],
-html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] .app-theme:has(.terminal.xterm) {
+html.codex-picture-background [data-codex-terminal="true"],
+html.codex-picture-background .app-theme:has(.terminal.xterm) {
   background: transparent !important;
   background-image: none !important;
   border-color: transparent !important;
@@ -389,8 +353,8 @@ html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] .app-th
 html.codex-picture-background [data-app-shell-focus-area="bottom-panel"] [data-app-shell-tabs="true"] {
   background: var(--picture-terminal) !important;
   border-color: color-mix(in oklab, var(--picture-cyan) 28%, var(--picture-line)) !important;
-  box-shadow: inset 0 1px rgb(85 230 255 / 9%) !important;
-  backdrop-filter: blur(14px) saturate(.88) !important;
+  box-shadow: inset 0 1px color-mix(in srgb, var(--picture-cyan) 9%, transparent) !important;
+  backdrop-filter: blur(var(--picture-blur-terminal)) saturate(.88) !important;
 }
 
 html.codex-picture-background [data-app-shell-tabs="true"]
@@ -402,11 +366,11 @@ html.codex-picture-background [data-app-shell-tabs="true"]
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
   [class*="group/tab"][role="button"] {
-  background: linear-gradient(90deg, rgb(240 90 170 / 13%), rgb(85 230 255 / 7%)) !important;
-  border: 1px solid rgb(85 230 255 / 13%) !important;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--picture-magenta) 13%, transparent), color-mix(in srgb, var(--picture-cyan) 7%, transparent)) !important;
+  border: 1px solid color-mix(in srgb, var(--picture-cyan) 13%, transparent) !important;
 }
 
-html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
+html.codex-picture-background
   :is(.terminal.xterm, .xterm-viewport, .xterm-screen, .xterm-scroll-area, .xterm-rows) {
   background-color: transparent !important;
 }
@@ -463,7 +427,7 @@ html.codex-picture-background [data-app-shell-focus-area="right-panel"]
   [data-app-shell-tabs="true"] {
   background: var(--picture-output) !important;
   border-color: color-mix(in oklab, var(--picture-cyan) 24%, var(--picture-line)) !important;
-  box-shadow: inset 1px 0 rgb(85 230 255 / 9%) !important;
+  box-shadow: inset 1px 0 color-mix(in srgb, var(--picture-cyan) 9%, transparent) !important;
   backdrop-filter: none !important;
 }
 
@@ -488,8 +452,8 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   box-shadow:
     0 18px 42px rgb(0 0 0 / 28%),
     inset 0 0 0 1px rgb(255 255 255 / 4%),
-    0 0 22px rgb(159 120 255 / 8%) !important;
-  backdrop-filter: blur(18px) saturate(.9) !important;
+    0 0 22px color-mix(in srgb, var(--picture-violet) 8%, transparent) !important;
+  backdrop-filter: blur(var(--picture-blur-output)) saturate(.9) !important;
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"])
@@ -508,8 +472,8 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   box-shadow:
     0 10px 34px rgb(0 0 0 / 26%),
     inset 0 0 0 1px rgb(255 255 255 / 4%),
-    0 0 18px rgb(85 230 255 / 7%) !important;
-  backdrop-filter: blur(14px) saturate(.95) !important;
+    0 0 18px color-mix(in srgb, var(--picture-cyan) 7%, transparent) !important;
+  backdrop-filter: blur(var(--picture-blur-control)) saturate(.95) !important;
   transition: border-color 180ms ease, box-shadow 180ms ease !important;
 }
 
@@ -520,61 +484,83 @@ html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSu
   border-color: var(--picture-neon-line) !important;
   box-shadow:
     0 12px 38px rgb(0 0 0 / 34%),
-    inset 0 0 0 1px rgb(85 230 255 / 15%),
-    0 0 22px rgb(85 230 255 / 13%),
-    0 0 34px rgb(240 90 170 / 8%) !important;
+    inset 0 0 0 1px color-mix(in srgb, var(--picture-cyan) 15%, transparent),
+    0 0 22px color-mix(in srgb, var(--picture-cyan) 13%, transparent),
+    0 0 34px color-mix(in srgb, var(--picture-magenta) 8%, transparent) !important;
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) button:hover:not(:disabled) {
-  border-color: rgb(85 230 255 / 22%) !important;
-  box-shadow: 0 0 15px rgb(85 230 255 / 8%);
+  border-color: color-mix(in srgb, var(--picture-cyan) 22%, transparent) !important;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--picture-cyan) 8%, transparent);
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [data-state="active"],
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) [aria-selected="true"] {
   border-color: var(--picture-neon-line) !important;
-  box-shadow: inset 0 -2px var(--picture-cyan), 0 0 14px rgb(85 230 255 / 10%) !important;
+  box-shadow: inset 0 -2px var(--picture-cyan), 0 0 14px color-mix(in srgb, var(--picture-cyan) 10%, transparent) !important;
 }
 
 html.codex-picture-background :is(main.main-surface, main[class*="_MainContentSurface_"]) a:hover {
   color: color-mix(in oklab, currentColor 72%, var(--picture-cyan)) !important;
-  text-shadow: 0 0 10px rgb(85 230 255 / 18%);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--picture-cyan) 18%, transparent);
 }
 
 /* Comic chat balloons: keep text upright and reserve space for the tail. */
 html.codex-picture-background [data-user-message-bubble="true"] {
-  --color-text-user-message: #fff;
-  background: #08080b !important;
-  color: #fff !important;
-  border: 2px solid #f5f5f7 !important;
+  --color-text-user-message: var(--picture-bubble-text);
+  background: var(--picture-bubble-background) !important;
+  color: var(--picture-bubble-text) !important;
+  border: 2px solid var(--picture-bubble-border) !important;
   border-radius: 0 !important;
-  box-shadow: -4px 4px 0 #08080b, -4px 4px 0 1px #f5f5f7 !important;
-  padding: 9px 14px !important;
-  margin-inline-end: 18px;
+  box-shadow: -4px 4px 0 var(--picture-bubble-background), -4px 4px 0 1px var(--picture-bubble-border) !important;
+  padding: var(--picture-bubble-padding) !important;
+  margin-inline-end: var(--picture-bubble-tail-space);
   margin-block: 6px;
   position: relative;
   overflow: visible !important;
+  min-width: 0;
+  max-width: min(70%, calc(100% - var(--picture-bubble-tail-space) - 6px)) !important;
+  overflow-wrap: anywhere;
 }
 
+html.codex-picture-background [data-user-message-bubble="true"] :is(pre, img, video) {
+  max-width: 100%;
+}
+
+html.codex-picture-background [data-user-message-bubble="true"] pre {
+  white-space: pre;
+  overflow-x: auto;
+}
+
+html.codex-picture-background [data-user-message-bubble="true"]::before,
 html.codex-picture-background [data-user-message-bubble="true"]::after {
   content: "";
   position: absolute;
-  top: -9px;
-  right: -21px;
-  width: 26px;
-  height: 28px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 28'%3E%3Cpath fill='%23f5f5f7' d='M0 14 L11 7 L12 12 L26 0 L15 23 L10 19 L0 28 Z'/%3E%3Cpath fill='%2308080b' d='M0 17 L9 12 L10 17 L20 8 L14 19 L10 16 L0 24 Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  top: var(--picture-bubble-tail-top);
+  right: var(--picture-bubble-tail-right);
+  width: var(--picture-bubble-tail-width);
+  height: var(--picture-bubble-tail-height);
   pointer-events: none;
+}
+
+html.codex-picture-background [data-user-message-bubble="true"]::before {
+  background: var(--picture-bubble-border);
+  clip-path: polygon(0 50%, 42.3% 25%, 46.2% 42.9%, 100% 0, 57.7% 82.1%, 38.5% 67.9%, 0 100%);
+}
+
+html.codex-picture-background [data-user-message-bubble="true"]::after {
+  background: var(--picture-bubble-background);
+  clip-path: polygon(0 60.7%, 34.6% 42.9%, 38.5% 60.7%, 76.9% 28.6%, 53.8% 67.9%, 38.5% 57.1%, 0 85.7%);
 }
 
 html.codex-picture-background pre,
 html.codex-picture-background code[class*="language-"] {
-  border-color: rgb(159 120 255 / 18%) !important;
-  box-shadow: inset 0 0 0 1px rgb(85 230 255 / 4%);
+  border-color: color-mix(in srgb, var(--picture-violet) 18%, transparent) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--picture-cyan) 4%, transparent);
 }
 
 html.codex-picture-background * {
-  scrollbar-color: rgb(240 90 170 / 52%) rgb(8 7 16 / 35%);
+  scrollbar-color: color-mix(in srgb, var(--picture-magenta) 52%, transparent) rgb(8 7 16 / 35%);
 }
 
 html.codex-picture-background *::-webkit-scrollbar {
@@ -610,8 +596,8 @@ html.codex-picture-background [role="tooltip"] {
   box-shadow:
     0 18px 48px rgb(0 0 0 / 34%),
     inset 0 0 0 1px rgb(255 255 255 / 4%),
-    0 0 24px rgb(85 230 255 / 8%) !important;
-  backdrop-filter: blur(18px) saturate(.9) !important;
+    0 0 24px color-mix(in srgb, var(--picture-cyan) 8%, transparent) !important;
+  backdrop-filter: blur(var(--picture-blur-elevated)) saturate(.9) !important;
 }
 
 /* Newer Codex builds give tooltip children an explicit light-theme color. */
@@ -625,8 +611,8 @@ html.codex-picture-background [role="menu"][data-state="open"] [role="menuitem"]
 }
 
 html.codex-picture-background [role="menu"][data-state="open"] [role="menuitem"]:is(:hover, :focus) {
-  background: linear-gradient(90deg, rgb(240 90 170 / 18%), rgb(85 230 255 / 8%)) !important;
-  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 14px rgb(85 230 255 / 7%) !important;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--picture-magenta) 18%, transparent), color-mix(in srgb, var(--picture-cyan) 8%, transparent)) !important;
+  box-shadow: inset 2px 0 var(--picture-magenta), 0 0 14px color-mix(in srgb, var(--picture-cyan) 7%, transparent) !important;
 }
 
 html.codex-picture-background [role="menu"][data-state="open"]

@@ -4,6 +4,8 @@
 
 安装前请准备 Node.js 22 或更高版本，然后运行 `.\codex-picture-background\install.ps1`。安装完成后，从桌面或开始菜单打开 **Codex Picture Background** 即可使用；运行 `stop.ps1` 可恢复原生外观。
 
+更新时下载新版并再次运行安装脚本，会保留已有背景和安装目录中的可选 `user.css`。运行中的皮肤可直接热更新。参数、自定义及备份说明见 [使用文档](codex-picture-background/README.md)。
+
 ## 说明
 
 - 个人自用存档

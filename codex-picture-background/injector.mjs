@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VERSION = "1.2.41";
+const VERSION = "1.3.0";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 const ID = /^[A-Za-z0-9._-]{1,200}$/;
@@ -172,7 +172,7 @@ async function installInPage(cssText, artDataUrl, version) {
       sidebar: false,
     };
   }
-  if (previous?.version === version && document.getElementById(STYLE_ID)) {
+  if (previous?.version === version && document.getElementById(STYLE_ID)?.textContent === cssText) {
     previous.ensure();
     return {
       installed: true,
@@ -248,7 +248,12 @@ const removeExpression = `(() => {
 })()`;
 
 async function loadPayload(background, version) {
-  const css = await fs.readFile(path.join(here, "background.css"), "utf8");
+  let css = await fs.readFile(path.join(here, "background.css"), "utf8");
+  try {
+    css += "\n/* User overrides */\n" + await fs.readFile(path.join(here, "user.css"), "utf8");
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
   const image = await fs.readFile(path.join(here, background));
   if (!css.includes("codex-picture-background") || image.length < 1024) throw new Error("Background assets are invalid");
   const artDataUrl = `data:image/png;base64,${image.toString("base64")}`;
@@ -367,8 +372,8 @@ async function main() {
       const session = await new Session(target, options.port).open();
       try {
         const result = await session.evaluate(`(async () => {
-          const bottomSelector = '[data-app-shell-focus-area="bottom-panel"]';
-          let bottom = document.querySelector(bottomSelector);
+          const bottomSelector = '[data-app-shell-focus-area="bottom-panel"], [data-app-shell-focus-area="right-panel"]';
+          let bottom = document.querySelector('[data-codex-terminal="true"]')?.closest(bottomSelector);
           if (!bottom) {
             const toggle = [...document.querySelectorAll('button[aria-label]')].find((button) =>
               /bottom panel|底部面板/i.test(button.getAttribute('aria-label') || '')
@@ -377,7 +382,7 @@ async function main() {
             const deadline = Date.now() + 5000;
             while (!bottom && Date.now() < deadline) {
               await new Promise((resolve) => setTimeout(resolve, 100));
-              bottom = document.querySelector(bottomSelector);
+              bottom = document.querySelector('[data-codex-terminal="true"]')?.closest(bottomSelector);
             }
           }
           const tabs = bottom?.querySelector('[data-app-shell-tabs="true"]');
@@ -421,7 +426,7 @@ async function main() {
         })()`);
         process.stdout.write(`${JSON.stringify(result)}\n`);
         if (!result.tested) continue;
-        if (!result.passed) throw new Error("Bottom terminal background regression failed");
+        if (!result.passed) throw new Error("Terminal background regression failed");
         return;
       } finally {
         session.close();

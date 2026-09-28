@@ -10,7 +10,7 @@
 - `stop.ps1`：停止注入并恢复当前窗口的原生外观
 - `injector.mjs`：仅使用 Node.js 内置 API 的注入器
 
-兼容 Codex 26.730.8199 及其新版 Electron 启动流程：即使调试接口在主窗口创建期间短暂重启，注入器也会继续等待，直到主界面挂载后再确认成功。新版底部终端使用嵌套的 app-shell 面板；皮肤只在最外层绘制一次半透明遮罩，避免多层背景叠加成纯黑。
+以当前 Codex Electron 的 app-shell 界面为适配目标。即使调试接口在主窗口创建期间短暂重启，注入器也会继续等待，直到主界面挂载后再确认成功。面板只在最外层绘制一次半透明遮罩，避免多层背景叠加成纯黑。
 
 26.924.1866 适配：清除插件、资料库等页面共用吸顶搜索页头的 `::before` 背景叠层；新版输入框通过 `data-composer-*` 属性恢复半透明背景与聚焦光效，补充 CSS Modules 顶部渐变层选择器，并跟进正文的 `--thread-content-expanded-max-width` 宽度变量。
 
@@ -31,3 +31,26 @@
 ```powershell
 .\start.ps1 -Background background-2.png
 ```
+
+## 自定义与本地更新
+
+下载新版后重新运行源文件夹中的 `install.ps1`，可用 `-Destination` 指定安装目录。更新保留已有同名背景、额外的 `background-N.png` 和 `user.css`，只补充缺失的默认背景；需要替换已有图片时请自行复制。`-NoShortcuts` 可跳过桌面和开始菜单快捷方式更新。
+
+安装目录中的 `user.css` 是可选覆盖文件，会在基础样式之后加载。默认不需要创建它。所有主要颜色、遮罩和模糊参数位于 `background.css` 顶部；复制需要调整的变量到 `user.css`，例如：
+
+```css
+:root.codex-picture-background {
+  --picture-violet: #9f78ff;
+  --picture-output: rgb(18 16 29 / 60%);
+  --picture-blur-sidebar: 10px;
+  --picture-bubble-tail-space: 22px;
+}
+```
+
+编辑后重新运行安装脚本，可向运行中的皮肤会话重新注入同版本样式，无需重启 Codex。未运行皮肤时，安装只更新文件，之后通过快捷方式启动。代码字体和字号仍由应用设置控制。
+
+被替换的程序和基础 CSS 会保存在安装目录的 `backups/时间戳/`。旧版直接改在基础 CSS 内的自定义内容不会自动合并，请从备份迁移到 `user.css`。更新失败会恢复被替换文件；原会话可连接时尝试恢复旧皮肤和监听进程。结果及失败步骤记录在 `update.log`，恢复失败也会单独记录。
+
+## 验证
+
+运行 `node injector.mjs --self-test` 检查资源加载；运行 `tests/install.tests.ps1` 在临时目录验证安装、资源保留和失败回滚，不修改快捷方式。运行中注入验证使用现有 `--verify --port ... --browser-id ... --background ...`，连接信息位于安装目录的 `state.json`。
