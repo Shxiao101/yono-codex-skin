@@ -13,6 +13,9 @@ const target = (id, type, url) => ({ id, type, url, webSocketDebuggerUrl: `ws://
 const app = target("app", "page", "app://-/index.html");
 const review = target("review", "webview", "codex-sandbox://mcp-app-example.web-sandbox.oaiusercontent.com/#review");
 
+const settings = target("settings", "webview", review.url + "-settings");
+const views = [{ title: "Code Review", src: review.url }, { title: "Code Review settings", src: settings.url }];
+
 function harness({ items = [app, review], ready = true } = {}) {
   const calls = [];
   class MockSession {
@@ -25,7 +28,7 @@ function harness({ items = [app, review], ready = true } = {}) {
     }
     async evaluate(expression) {
       calls.push({ expression, target: this.target.id, context: this.contextId });
-      if (expression.includes(".map((view) => view.src)")) return [review.url];
+      if (expression.includes(".map((view) => view.src)")) return views.filter(view => expression.includes(`title="${view.title}"`)).map(view => view.src);
       if (expression.includes("const view =")) return { width: 1536, height: 912, x: 340, y: 96, position: "50% 50%" };
       return { installed: expression === "install", removed: expression !== "install" };
     }
@@ -41,12 +44,12 @@ function harness({ items = [app, review], ready = true } = {}) {
 
 test("only the host-owned Code Review sandbox joins existing app/Figma targets", async () => {
   const figma = target("figma", "iframe", "https://www.figma.com/integrations/mcp-app");
-  const h = harness({ items: [app, review, figma,
+  const h = harness({ items: [app, review, settings, figma,
     target("other-mcp", "webview", review.url + "-other"),
     target("browser", "webview", "https://chatgpt.com/"),
     target("stale", "other", review.url),
   ] });
-  assert.deepEqual(Array.from(await h.targets(options), t => t.id), ["app", "review", "figma"]);
+  assert.deepEqual(Array.from(await h.targets(options), t => t.id), ["app", "review", "settings", "figma"]);
 });
 
 test("installs and aligns the named inner iframe in a reusable isolated world", async () => {
@@ -61,6 +64,16 @@ test("installs and aligns the named inner iframe in a reusable isolated world", 
   assert.ok(inner[1].expression.includes("alignFrameInPage"));
   assert.ok(h.calls.some(c => c.expression?.includes(JSON.stringify(review.url))));
   assert.ok(h.calls.some(c => c.closed === "review"));
+});
+
+test("settings use their own inner iframe and matching host crop", async () => {
+  const h = harness();
+  await h.applyToTarget(settings, options, "install", [app, settings]);
+  const inner = h.calls.filter(c => c.target === "settings");
+  assert.equal(inner.length, 2);
+  assert.ok(inner.every(c => c.context === 42));
+  assert.ok(h.calls.some(c => c.expression?.includes('title="Code Review settings"') &&
+    c.expression.includes(JSON.stringify(settings.url))));
 });
 
 test("removes from the same iframe world rather than the sandbox wrapper", async () => {
