@@ -142,6 +142,57 @@ html.codex-picture-background webview[class~="bg-surface"] {
   background: transparent !important;
 }
 
+/* The Figma MCP app paints through a sandbox WebView outside the tab panel. */
+html.codex-picture-background [class~="group/mcp-app"]:has(webview[title="Figma"]) {
+  background: var(--picture-output) !important;
+  border-color: var(--picture-line) !important;
+  backdrop-filter: blur(var(--picture-blur-output)) saturate(.9) !important;
+}
+
+html.codex-picture-background webview[title="Figma"] {
+  background: transparent !important;
+}
+
+/* Figma resets its palette on nested theme roots; override each boundary. */
+html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"])
+  :is(body, [data-preferred-theme]) {
+  --color-bg: var(--picture-card) !important;
+  --color-bg-secondary: var(--picture-control) !important;
+  --color-bg-tertiary: var(--picture-elevated) !important;
+  --color-bg-hover: color-mix(in srgb, var(--picture-violet) 16%, transparent) !important;
+  --color-bg-pressed: color-mix(in srgb, var(--picture-violet) 24%, transparent) !important;
+  --color-bg-selected: color-mix(in srgb, var(--picture-violet) 22%, transparent) !important;
+  --color-bg-brand: var(--picture-violet) !important;
+  --color-bg-brand-hover: #b498ff !important;
+  --color-bg-brand-pressed: #8c65ed !important;
+  --color-text: var(--picture-text-primary) !important;
+  --color-text-secondary: var(--picture-text-secondary) !important;
+  --color-text-tertiary: rgb(247 244 255 / 60%) !important;
+  --color-text-disabled: rgb(247 244 255 / 40%) !important;
+  --color-text-onbrand: var(--picture-ink) !important;
+  --color-text-brand: var(--picture-text-link) !important;
+  --color-text-selected: var(--picture-text-link) !important;
+  --color-icon: var(--picture-text-primary) !important;
+  --color-icon-secondary: var(--picture-text-secondary) !important;
+  --color-icon-tertiary: rgb(247 244 255 / 60%) !important;
+  --color-icon-brand: var(--picture-violet) !important;
+  --color-icon-selected: var(--picture-violet) !important;
+  --color-icon-onbrand: var(--picture-ink) !important;
+  --color-border: var(--picture-line) !important;
+  --color-border-strong: rgb(255 255 255 / 20%) !important;
+  --color-border-selected: var(--picture-violet) !important;
+}
+
+/* The native WebView is opaque, so keep the frame's own wallpaper visible. */
+html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"]) body {
+  background-size: var(--codex-picture-frame-size, cover) !important;
+  background-position: var(--codex-picture-frame-position, center center) !important;
+}
+
+html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"]) #react-page > div {
+  background: transparent !important;
+}
+
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) {
   background: linear-gradient(90deg, var(--picture-sidebar), var(--picture-sidebar-end)) !important;
   border-color: var(--picture-line) !important;
@@ -155,6 +206,11 @@ html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-ap
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) :is(nav, .sidebar-navigation),
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label]))::after {
   background: transparent !important;
+}
+
+/* Rail hover panels extend beyond the narrow aside and need their own backdrop. */
+html.codex-picture-background aside.app-shell-left-panel[data-slate-sidebar-peeking="true"] .sidebar-navigation[data-slate-sidebar-content] {
+  background: #080711 !important;
 }
 
 html.codex-picture-background :is(aside.app-shell-left-panel, aside:not([data-app-shell-focus-area="right-panel"]):has(nav[aria-label])) button,
