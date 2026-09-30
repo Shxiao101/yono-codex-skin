@@ -79,7 +79,7 @@ async function targets(options) {
     const host = await new Session(page, options.port).open();
     try {
       const urls = await host.evaluate(
-        `[...document.querySelectorAll('webview[title="Code Review"]')].map((view) => view.src)`
+        `[...document.querySelectorAll('webview:is([title="Code Review"], [title="Code Review settings"])')].map((view) => view.src)`
       );
       for (const url of urls) reviewUrls.add(url);
     } finally { host.close(); }
@@ -323,7 +323,7 @@ async function applyToTarget(target, options, expression, appTargets) {
         try {
           backdrop = await host.evaluate(`(() => {
             const view = ${target.type === "webview"
-              ? `[...document.querySelectorAll('webview[title="Code Review"]')].find((view) => view.src === ${JSON.stringify(target.url)})`
+              ? `[...document.querySelectorAll('webview:is([title="Code Review"], [title="Code Review settings"])')].find((view) => view.src === ${JSON.stringify(target.url)})`
               : `document.querySelector('webview[title="Figma"]')`};
             const frame = view?.closest('[data-mcp-app-frame]');
             if (!frame) return null;

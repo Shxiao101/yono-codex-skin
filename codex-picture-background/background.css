@@ -143,13 +143,13 @@ html.codex-picture-background webview[class~="bg-surface"] {
 }
 
 /* Embedded app panels paint through sandbox WebViews outside the tab panel. */
-html.codex-picture-background [class~="group/mcp-app"]:has(webview:is([title="Figma"], [title="Code Review"])) {
+html.codex-picture-background [class~="group/mcp-app"]:has(webview:is([title="Figma"], [title="Code Review"], [title="Code Review settings"])) {
   background: var(--picture-output) !important;
   border-color: var(--picture-line) !important;
   backdrop-filter: blur(var(--picture-blur-output)) saturate(.9) !important;
 }
 
-html.codex-picture-background webview:is([title="Figma"], [title="Code Review"]) {
+html.codex-picture-background webview:is([title="Figma"], [title="Code Review"], [title="Code Review settings"]) {
   background: transparent !important;
 }
 
