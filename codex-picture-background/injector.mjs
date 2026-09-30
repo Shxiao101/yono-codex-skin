@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VERSION = "1.3.0";
+const VERSION = "1.3.2";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 const ID = /^[A-Za-z0-9._-]{1,200}$/;
@@ -74,8 +74,14 @@ async function targets(options) {
   await assertBrowserIdentity(options);
   const items = await cdpJson(options.port, "/json/list");
   return items.filter((item) => {
-    if (item?.type !== "page" || typeof item.url !== "string" || !item.url.startsWith("app://") || !ID.test(item.id)) return false;
+    if (typeof item?.url !== "string" || !ID.test(item.id)) return false;
     try {
+      const url = new URL(item.url);
+      // The Figma MCP app is a separate renderer inside the sandbox WebView.
+      const isAppPage = item.type === "page" && url.protocol === "app:";
+      const isFigmaFrame = item.type === "iframe" && url.origin === "https://www.figma.com" &&
+        url.pathname === "/integrations/mcp-app";
+      if (!isAppPage && !isFigmaFrame) return false;
       checkedWebSocketUrl(item.webSocketDebuggerUrl, options.port, "page", item.id);
       return true;
     } catch {
@@ -215,6 +221,8 @@ async function installInPage(cssText, artDataUrl, version) {
     clearTimeout(schedule);
     document.documentElement?.classList.remove(ROOT_CLASS);
     document.documentElement?.style.removeProperty("--codex-picture-art");
+    document.documentElement?.style.removeProperty("--codex-picture-frame-size");
+    document.documentElement?.style.removeProperty("--codex-picture-frame-position");
     document.getElementById(STYLE_ID)?.remove();
     URL.revokeObjectURL(artUrl);
     delete window[STATE];
@@ -243,6 +251,8 @@ const removeExpression = `(() => {
   const removed = state?.cleanup?.() ?? false;
   document.documentElement?.classList.remove("codex-picture-background");
   document.documentElement?.style.removeProperty("--codex-picture-art");
+  document.documentElement?.style.removeProperty("--codex-picture-frame-size");
+  document.documentElement?.style.removeProperty("--codex-picture-frame-position");
   document.getElementById("codex-picture-background-style")?.remove();
   return { removed };
 })()`;
@@ -260,10 +270,49 @@ async function loadPayload(background, version) {
   return `(${installInPage.toString()})(${JSON.stringify(css)},${JSON.stringify(artDataUrl)},${JSON.stringify(version)})`;
 }
 
-async function applyToTarget(target, options, expression) {
+async function alignFrameInPage(backdrop) {
+  const image = new Image();
+  image.src = window.__CODEX_PICTURE_BACKGROUND__.artUrl;
+  await image.decode();
+  const scale = Math.max(backdrop.width / image.naturalWidth, backdrop.height / image.naturalHeight);
+  const width = image.naturalWidth * scale;
+  const height = image.naturalHeight * scale;
+  const [horizontal, vertical] = backdrop.position.split(" ");
+  const offset = (position, space) => position.endsWith("%")
+    ? space * parseFloat(position) / 100 : parseFloat(position);
+  const x = offset(horizontal, backdrop.width - width) - backdrop.x;
+  const y = offset(vertical, backdrop.height - height) - backdrop.y;
+  document.documentElement.style.setProperty("--codex-picture-frame-size", `${width}px ${height}px`);
+  document.documentElement.style.setProperty("--codex-picture-frame-position", `${x}px ${y}px`);
+}
+
+async function applyToTarget(target, options, expression, appTargets) {
   const session = await new Session(target, options.port).open();
   try {
-    return await session.evaluate(expression);
+    const result = await session.evaluate(expression);
+    if (result?.installed && target.type === "iframe") {
+      // Match the host's cover crop even while the MCP app is hidden or resized.
+      for (const page of appTargets.filter((item) => item.type === "page")) {
+        const host = await new Session(page, options.port).open();
+        let backdrop;
+        try {
+          backdrop = await host.evaluate(`(() => {
+            const frame = document.querySelector('webview[title="Figma"]')?.closest('[data-mcp-app-frame]');
+            if (!frame) return null;
+            return {
+              width: innerWidth, height: innerHeight,
+              x: parseFloat(frame.style.left), y: parseFloat(frame.style.top),
+              position: getComputedStyle(document.body).backgroundPosition.split(',').at(-1).trim()
+            };
+          })()`);
+        } finally { host.close(); }
+        if (backdrop) {
+          await session.evaluate(`(${alignFrameInPage.toString()})(${JSON.stringify(backdrop)})`);
+          break;
+        }
+      }
+    }
+    return result;
   } finally {
     session.close();
   }
@@ -274,7 +323,7 @@ async function applyAll(options, expression) {
   let applied = 0;
   for (const target of appTargets) {
     try {
-      const result = await applyToTarget(target, options, expression);
+      const result = await applyToTarget(target, options, expression, appTargets);
       if (result?.installed) applied += 1;
     } catch (error) {
       process.stderr.write(`Target ${target.id}: ${error.message}\n`);
@@ -335,7 +384,7 @@ async function main() {
   if (options.mode === "remove") {
     const appTargets = await targets(options);
     for (const target of appTargets) {
-      try { await applyToTarget(target, options, removeExpression); } catch {}
+      try { await applyToTarget(target, options, removeExpression, appTargets); } catch {}
     }
     return;
   }
@@ -452,7 +501,7 @@ async function main() {
         let ready = 0;
         for (const target of appTargets) {
           try {
-            const result = await applyToTarget(target, options, payload);
+            const result = await applyToTarget(target, options, payload, appTargets);
             process.stdout.write(`${JSON.stringify(result)}\n`);
             // Electron can expose an app:// target before the primary UI has
             // mounted. Keep polling so a renderer replacement or late mount
