@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VERSION = "1.3.2";
+const VERSION = "1.3.3";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1", "[::1]"]);
 const ID = /^[A-Za-z0-9._-]{1,200}$/;
@@ -73,6 +73,17 @@ async function assertBrowserIdentity(options) {
 async function targets(options) {
   await assertBrowserIdentity(options);
   const items = await cdpJson(options.port, "/json/list");
+  // Only skin the sandbox explicitly owned by the Code Review panel, not other MCP apps.
+  const reviewUrls = new Set();
+  for (const page of items.filter((item) => item.type === "page" && item.url.startsWith("app:"))) {
+    const host = await new Session(page, options.port).open();
+    try {
+      const urls = await host.evaluate(
+        `[...document.querySelectorAll('webview[title="Code Review"]')].map((view) => view.src)`
+      );
+      for (const url of urls) reviewUrls.add(url);
+    } finally { host.close(); }
+  }
   return items.filter((item) => {
     if (typeof item?.url !== "string" || !ID.test(item.id)) return false;
     try {
@@ -81,7 +92,8 @@ async function targets(options) {
       const isAppPage = item.type === "page" && url.protocol === "app:";
       const isFigmaFrame = item.type === "iframe" && url.origin === "https://www.figma.com" &&
         url.pathname === "/integrations/mcp-app";
-      if (!isAppPage && !isFigmaFrame) return false;
+      const isReviewView = item.type === "webview" && url.protocol === "codex-sandbox:" && reviewUrls.has(item.url);
+      if (!isAppPage && !isFigmaFrame && !isReviewView) return false;
       checkedWebSocketUrl(item.webSocketDebuggerUrl, options.port, "page", item.id);
       return true;
     } catch {
@@ -132,6 +144,7 @@ class Session {
   async evaluate(expression) {
     const response = await this.send("Runtime.evaluate", {
       expression,
+      contextId: this.contextId,
       awaitPromise: true,
       returnByValue: true,
       userGesture: false,
@@ -166,7 +179,7 @@ async function installInPage(cssText, artDataUrl, version) {
   const isAvatarOverlay = new URL(location.href).searchParams.get("initialRoute") === "/avatar-overlay";
   if (isAvatarOverlay) {
     previous?.cleanup?.();
-    document.documentElement.classList.remove(ROOT_CLASS);
+    document.documentElement.classList.remove(ROOT_CLASS, "codex-picture-review");
     document.documentElement.style.removeProperty("--codex-picture-art");
     document.getElementById(STYLE_ID)?.remove();
     return {
@@ -204,6 +217,7 @@ async function installInPage(cssText, artDataUrl, version) {
     const root = document.documentElement;
     if (!root) return;
     root.classList.add(ROOT_CLASS);
+    root.classList.toggle("codex-picture-review", location.protocol === "codex-sandbox:");
     root.style.setProperty("--codex-picture-art", `url("${artUrl}")`);
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -219,7 +233,7 @@ async function installInPage(cssText, artDataUrl, version) {
     observer?.disconnect();
     clearInterval(timer);
     clearTimeout(schedule);
-    document.documentElement?.classList.remove(ROOT_CLASS);
+    document.documentElement?.classList.remove(ROOT_CLASS, "codex-picture-review");
     document.documentElement?.style.removeProperty("--codex-picture-art");
     document.documentElement?.style.removeProperty("--codex-picture-frame-size");
     document.documentElement?.style.removeProperty("--codex-picture-frame-position");
@@ -249,7 +263,7 @@ async function installInPage(cssText, artDataUrl, version) {
 const removeExpression = `(() => {
   const state = window.__CODEX_PICTURE_BACKGROUND__;
   const removed = state?.cleanup?.() ?? false;
-  document.documentElement?.classList.remove("codex-picture-background");
+  document.documentElement?.classList.remove("codex-picture-background", "codex-picture-review");
   document.documentElement?.style.removeProperty("--codex-picture-art");
   document.documentElement?.style.removeProperty("--codex-picture-frame-size");
   document.documentElement?.style.removeProperty("--codex-picture-frame-position");
@@ -289,15 +303,29 @@ async function alignFrameInPage(backdrop) {
 async function applyToTarget(target, options, expression, appTargets) {
   const session = await new Session(target, options.port).open();
   try {
+    if (target.type === "webview") {
+      // Code Review renders inside the sandbox's root iframe, not its outer document.
+      const { frameTree } = await session.send("Page.getFrameTree");
+      const frame = frameTree.childFrames?.find((child) => child.frame.name === "root");
+      if (!frame) return { installed: false, reason: "review-frame-not-ready" };
+      const world = await session.send("Page.createIsolatedWorld", {
+        frameId: frame.frame.id,
+        worldName: "codex-picture-background",
+      });
+      session.contextId = world.executionContextId;
+    }
     const result = await session.evaluate(expression);
-    if (result?.installed && target.type === "iframe") {
+    if (result?.installed && (target.type === "iframe" || target.type === "webview")) {
       // Match the host's cover crop even while the MCP app is hidden or resized.
       for (const page of appTargets.filter((item) => item.type === "page")) {
         const host = await new Session(page, options.port).open();
         let backdrop;
         try {
           backdrop = await host.evaluate(`(() => {
-            const frame = document.querySelector('webview[title="Figma"]')?.closest('[data-mcp-app-frame]');
+            const view = ${target.type === "webview"
+              ? `[...document.querySelectorAll('webview[title="Code Review"]')].find((view) => view.src === ${JSON.stringify(target.url)})`
+              : `document.querySelector('webview[title="Figma"]')`};
+            const frame = view?.closest('[data-mcp-app-frame]');
             if (!frame) return null;
             return {
               width: innerWidth, height: innerHeight,

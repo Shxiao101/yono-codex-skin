@@ -142,14 +142,14 @@ html.codex-picture-background webview[class~="bg-surface"] {
   background: transparent !important;
 }
 
-/* The Figma MCP app paints through a sandbox WebView outside the tab panel. */
-html.codex-picture-background [class~="group/mcp-app"]:has(webview[title="Figma"]) {
+/* Embedded app panels paint through sandbox WebViews outside the tab panel. */
+html.codex-picture-background [class~="group/mcp-app"]:has(webview:is([title="Figma"], [title="Code Review"])) {
   background: var(--picture-output) !important;
   border-color: var(--picture-line) !important;
   backdrop-filter: blur(var(--picture-blur-output)) saturate(.9) !important;
 }
 
-html.codex-picture-background webview[title="Figma"] {
+html.codex-picture-background webview:is([title="Figma"], [title="Code Review"]) {
   background: transparent !important;
 }
 
@@ -184,12 +184,40 @@ html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_a
 }
 
 /* The native WebView is opaque, so keep the frame's own wallpaper visible. */
-html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"]) body {
+html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"]) body,
+html.codex-picture-background.codex-picture-review body {
   background-size: var(--codex-picture-frame-size, cover) !important;
   background-position: var(--codex-picture-frame-position, center center) !important;
 }
 
 html.codex-picture-background:has(meta[name="entrypoint_variant"][content="mcp_app_feed"]) #react-page > div {
+  background: transparent !important;
+}
+
+/* Code Review's nested full-page surfaces must not stack opaque backgrounds.
+   Diff colors remain native; surface tokens also inherit into diff shadow roots. */
+html.codex-picture-background.codex-picture-review #root > [class~="bg-surface"],
+html.codex-picture-background.codex-picture-review [class~="group/file-diff"] {
+  background: transparent !important;
+}
+
+/* Paint the code backdrop once on the host, not on every shadow-DOM line. */
+html.codex-picture-background.codex-picture-review diffs-container {
+  --color-surface: transparent !important;
+  background: var(--picture-surface) !important;
+}
+
+/* The changed-files pane owns one backdrop, including its filter. Tree rows
+   inherit a transparent surface instead of stacking another full-height wash. */
+html.codex-picture-background.codex-picture-review aside[aria-label="Changed files"][class~="sticky"] {
+  background: var(--picture-output) !important;
+  border-color: var(--picture-line) !important;
+  backdrop-filter: blur(var(--picture-blur-output)) saturate(.9) !important;
+}
+
+html.codex-picture-background.codex-picture-review aside[aria-label="Changed files"] file-tree-container {
+  --color-surface: transparent !important;
+  --trees-border-radius-override: 6px !important;
   background: transparent !important;
 }
 
